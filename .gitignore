@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Generated media
+*.mp4
+*.wav
+*.mp3
+
+# Generated project outputs
+runs/
+videos/
+voiceovers/
+scripts/
+tests/
+videos/
+drafts/
+assets/
+
+# Temp / artifacts
+artifacts/
+*.json
+
+# Test outputs / temporary scripts
+script_output.txt
+scripts/script_output*.txt
+old.txt
+
+# Python cache folders anywhere
+**/__pycache__/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local config
+.env
+.env.*
+
+# Optional large assets (if you don't want fonts tracked)
+# assets/
+
+# Whisper / ML caches
+
+
