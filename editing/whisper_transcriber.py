@@ -11,7 +11,7 @@ class WhisperTranscriber:
     def __init__(self, model_size: str = "medium", language: str | None = None):
         self.model_size = model_size
         self.language = language
-        self._model = None 
+        self._model = None
 
     @property
     def model(self):
@@ -23,8 +23,8 @@ class WhisperTranscriber:
 
     def transcribe(self, audio_path: str) -> list[dict]:
         """
-        Returns a list of words with timestamps:
-        [{"word": "hello", "start": 0.0, "end": 0.4}, ...]
+        Returns word-level timestamps from Whisper.
+        Each entry: {"word": str, "start": float, "end": float}
         """
         result = self.model.transcribe(
             audio_path,
@@ -42,24 +42,31 @@ class WhisperTranscriber:
                 })
         return words
 
-    def group_words(self, words: list[dict], words_per_group: int = 4) -> list[dict]:
-        """
-        Groups words into chunks of N while preserving the group's start and end timestamps.
-        Returns: [{"text": "...", "start": float, "end": float}, ...]
-        """
-        groups = []
-        for i in range(0, len(words), words_per_group):
-            chunk = words[i : i + words_per_group]
-            groups.append({
-                "text": " ".join(w["word"] for w in chunk),
-                "start": chunk[0]["start"],
-                "end": chunk[-1]["end"],
-            })
-        return groups
-
-    def get_caption_groups(
-        self, audio_path: str, words_per_group: int = 4
+    def get_karaoke_lines(
+        self,
+        audio_path: str,
+        words_per_line: int = 7,
     ) -> list[dict]:
-        """Shortcut: transcribe and group immediately."""
+        """
+        Groups words into lines and returns per-word highlight events.
+        """
         words = self.transcribe(audio_path)
-        return self.group_words(words, words_per_group)
+        if not words:
+            return []
+
+        events = []
+        for line_start in range(0, len(words), words_per_line):
+            line = words[line_start : line_start + words_per_line]
+            line_texts = [w["word"] for w in line]
+
+            for idx, word in enumerate(line):
+                # The word is "active" until the next word begins.
+                next_start = line[idx + 1]["start"] if idx + 1 < len(line) else word["end"]
+                events.append({
+                    "line_words": line_texts,
+                    "active_index": idx,
+                    "start": word["start"],
+                    "end": next_start,
+                })
+
+        return events

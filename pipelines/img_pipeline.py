@@ -1,9 +1,9 @@
-from .base_pipeline import BasePipeline
+from base_pipeline import BasePipeline
 
 import torch
 from diffusers import FluxPipeline
 
-from ..config_file import IMAGE_MODEL, IMAGE_GUIDANCE_SCALE, IMAGE_INFERENCE_STEPS, IMAGE_MAX_SEQ_LEN
+from config_file import IMAGE_MODEL, IMAGE_GUIDANCE_SCALE, IMAGE_INFERENCE_STEPS, IMAGE_MAX_SEQ_LEN
 
 class ImgPipeline(BasePipeline):
     def __init__(self, w, h, model_id: str = IMAGE_MODEL, out_dir: str = "images/"):

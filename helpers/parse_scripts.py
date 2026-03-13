@@ -32,10 +32,13 @@ def parse_script_robust(script_text: str) -> Dict[str, Any]:
         scene_name = f"Scene {num}"
         img_id = f"img_{num}"
 
+        visual = scene.get("visual")
         if visual is None:
             visuals_raw = scene.get("visuals", [])
             if isinstance(visuals_raw, list) and visuals_raw:
                 visual = visuals_raw[0].get("description", "")
+        if not isinstance(visual, str):
+            visual = ""
 
         narration = scene.get("narration")
         if not isinstance(narration, str):

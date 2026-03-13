@@ -1,7 +1,7 @@
 from typing import Type
 
-from .base_prompt import BasePrompt
-from .prompt_repository import PromptRepository
+from prompt.base_prompt import BasePrompt
+from prompt.prompt_repository import PromptRepository
 
 
 class ScriptPrompt(BasePrompt):

@@ -1,4 +1,4 @@
-from .base_pipeline import BasePipeline
+from pipelines.base_pipeline import BasePipeline
 from pydantic import BaseModel
 from diffusers import AutoencoderKLWan, WanPipeline
 from diffusers.utils import export_to_video

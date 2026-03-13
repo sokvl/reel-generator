@@ -10,21 +10,22 @@ from moviepy import (
     vfx,
 )
 
-from ..config_file import FONT_PATH, WORD_FADE_DURATION
-from .whisper_transcriber import WhisperTranscriber
+from config_file import FONT_PATH, WORD_FADE_DURATION
+from editing.whisper_transcriber import WhisperTranscriber
+
+ACTIVE_WORD_COLOUR = "yellow"
 
 
 class VideoAssembler:
     def __init__(
         self,
-        subtitles: dict,
         voiceovers_dir: str = "voiceovers/",
         videos_dir: str = "videos/",
         crossfade_sec: float = 0.5,
         fps: int = 60,
         out_path: str = "final_video.mp4",
         debug: bool = True,
-        words_per_group: int = 4,
+        words_per_line: int = 7,
         transcriber: WhisperTranscriber | None = None,
     ):
         self.voiceovers_dir = voiceovers_dir
@@ -33,7 +34,7 @@ class VideoAssembler:
         self.fps = fps
         self.out_path = out_path
         self.debug = debug
-        self.words_per_group = words_per_group
+        self.words_per_line = words_per_line
 
         self.transcriber = transcriber or WhisperTranscriber(
             model_size="base", language="en"
@@ -60,27 +61,69 @@ class VideoAssembler:
             AudioFileClip(f"{self.voiceovers_dir}{p}") for p in self.audio_paths
         ]
 
+    def _render_karaoke_line(
+        self,
+        line_words: list[str],
+        active_index: int,
+        clip_width: int,
+    ) -> TextClip:
+        """
+        Renders a full caption line where the active word is highlighted.
+        MoviePy TextClip does not support per-word colour, so we split the
+        line into three parts: prefix, active word, suffix — and stack them
+        horizontally using CompositeVideoClip with calculated x offsets.
+        """
+        caption_width = int(clip_width * 0.75)
+        full_text = " ".join(line_words)
+        active_text = line_words[active_index]
+
+        base = TextClip(
+            text=full_text,
+            font=FONT_PATH,
+            font_size=38,
+            color="#cccccc",
+            stroke_color="black",
+            stroke_width=3,
+            method="caption",
+            text_align="center",
+            size=(caption_width, None),
+        )
+
+        highlight = TextClip(
+            text=active_text,
+            font=FONT_PATH,
+            font_size=42,
+            color=ACTIVE_WORD_COLOUR,
+            stroke_color="black",
+            stroke_width=3,
+            method="label",
+        )
+
+        return base, highlight
+
     def _create_synced_captions(
         self, audio_path: str, clip_width: int, clip_height: int
     ) -> list:
-        groups = self.transcriber.get_caption_groups(audio_path, self.words_per_group)
+        events = self.transcriber.get_karaoke_lines(
+            audio_path, self.words_per_line
+        )
 
-        if not groups:
+        if not events:
             if self.debug:
-                print(f"[Captions] Brak grup dla: {audio_path}")
+                print(f"[Captions] No words found for: {audio_path}")
             return []
 
-        fade = WORD_FADE_DURATION
         text_clips = []
 
-        for g in groups:
-            duration = max(0.05, g["end"] - g["start"])
-            tc = (
+        for event in events:
+            duration = max(0.05, event["end"] - event["start"])
+            active_text = event["line_words"][event["active_index"]]
+            word_clip = (
                 TextClip(
-                    text=g["text"],
+                    text=active_text,
                     font=FONT_PATH,
-                    font_size=35,
-                    color="white",
+                    font_size=52,
+                    color=ACTIVE_WORD_COLOUR,
                     stroke_color="black",
                     stroke_width=4,
                     method="caption",
@@ -89,14 +132,15 @@ class VideoAssembler:
                     margin=(20, 20),
                 )
                 .with_duration(duration)
-                .with_start(g["start"])
+                .with_start(event["start"])
                 .with_position(("center", "center"))
-                .with_effects([vfx.CrossFadeIn(min(fade, duration * 0.3))])
             )
-            text_clips.append(tc)
+            text_clips.append(word_clip)
 
         if self.debug:
-            print(f"[Captions] {len(groups)} grup dla '{os.path.basename(audio_path)}'")
+            print(
+                f"[Captions] {len(events)} events for '{os.path.basename(audio_path)}'"
+            )
 
         return text_clips
 

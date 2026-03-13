@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .prompts.prompt_lib import (
+from prompt.prompts.prompt_lib import (
                                     IDEA_BRAINSTORMING_PROMPT_HEADER,
                                     IDEA_BRAINSTORMING_PROMPT_CORE, 
                                     IDEA_BRAINSTORMING_PROMPT_TAIL,

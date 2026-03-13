@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 import torch
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from ..prompt.base_prompt import BasePrompt
+from prompt.base_prompt import BasePrompt
 
 
 @dataclass(frozen=True)

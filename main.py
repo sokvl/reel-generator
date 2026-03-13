@@ -1,15 +1,15 @@
 from pathlib import Path
 import argparse
 import gc
-from .config_file import TTS_SAMPLE_RATE
+from config_file import TTS_SAMPLE_RATE
 import soundfile as sf
-from .editing.editor import VideoAssembler
-from .helpers.load_prompt import load_prompt, load_json
-from .helpers.parse_scripts import parse_script_robust
-from .prompt.txt_prompt import prompt_factory
-from .script.scripter import LLMFacade
-from .archivist.archivist import Archivist
-from .pipelines.video_pipeline_t2i import VideoPipelineT2I
+from editing.editor import VideoAssembler
+from helpers.load_prompt import load_prompt, load_json
+from helpers.parse_scripts import parse_script_robust
+from prompt.txt_prompt import prompt_factory
+from script.scripter import LLMFacade
+from archivist.archivist import Archivist
+from pipelines.video_pipeline_t2i import VideoPipelineT2I
 from kokoro import KPipeline
 
 
