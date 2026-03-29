@@ -1,3 +1,6 @@
+import gc
+
+import torch
 import whisper
 
 
@@ -41,6 +44,16 @@ class WhisperTranscriber:
                     "end": w["end"],
                 })
         return words
+
+    def unload(self):
+        """Free Whisper model from GPU memory."""
+        if self._model is not None:
+            del self._model
+            self._model = None
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            gc.collect()
+            print("[WhisperTranscriber] Model unloaded.")
 
     def get_karaoke_lines(
         self,

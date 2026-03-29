@@ -194,6 +194,7 @@ class VideoAssembler:
             c.close()
         if self.final is not None:
             self.final.close()
+        self.transcriber.unload()
 
     def run(self):
         self._load_paths_and_script()

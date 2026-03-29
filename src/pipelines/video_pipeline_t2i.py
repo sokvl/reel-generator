@@ -97,10 +97,11 @@ class VideoPipelineT2I(BasePipeline):
             fps: Frames per second for output video
         """
         try:
-            # Load pipeline
-            self._aggressive_cleanup()
-            self._load_pipeline()
-            
+            # Load pipeline only if not already loaded
+            if self.pipe is None:
+                self._aggressive_cleanup()
+                self._load_pipeline()
+
             self._log_memory("Before generation")
             
             if negative_prompt is None:
@@ -141,8 +142,7 @@ worst quality, low quality, ugly, deformed, contains text, contains letters, rea
             raise
         
         finally:
-            self._aggressive_cleanup()
-            self._log_memory("After cleanup")
+            self._log_memory("After generation (kept loaded for next scene)")
 
     def __del__(self):
         """Cleanup when object is destroyed"""

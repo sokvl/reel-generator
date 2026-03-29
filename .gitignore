@@ -30,22 +30,22 @@ Thumbs.db
 *.mp3
 
 # Generated project outputs
-runs/
-videos/
-voiceovers/
-scripts/
-tests/
-videos/
-drafts/
-assets/
+src/runs/
+src/videos/
+src/voiceovers/
+src/scripts/
+src/tests/
+src/videos/
+src/drafts/
+src/assets/
 
 # Temp / artifacts
-artifacts/
+src/artifacts/
 *.json
 
 # Test outputs / temporary scripts
-script_output.txt
-scripts/script_output*.txt
+src/script_output.txt
+src/scripts/script_output*.txt
 old.txt
 
 # Python cache folders anywhere

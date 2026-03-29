@@ -40,7 +40,7 @@ class LLMFacade:
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_id)
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.model_id,
-                torch_dtype=self.dtype,
+                dtype=self.dtype,
                 device_map=self.device_map
             )
 
