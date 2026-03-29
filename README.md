@@ -38,7 +38,11 @@ Rendering diffusion-based video is resource-intensive. While this serves as a so
 
 ## Final Output Demo
 
-![Demo Video](demo/neuroplasticity.mp4)
+<p align="center">
+  <video src="demo/neuroplasticity.mp4" width="320" controls>
+    Your browser does not support the video tag.
+  </video>
+</p>
 
-Prompt: "How does neuroplasticity work and what it is?"
-Description: A 60-second video explaining neural reorganization with synced narration and dynamic subtitles.
+**Prompt:** "How does neuroplasticity work and what it is?"  
+**Description:** A 60-second video explaining neural reorganization with synced narration and dynamic subtitles.
