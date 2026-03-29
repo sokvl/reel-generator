@@ -13,7 +13,7 @@ build/
 dist/
 *.egg-info/
 
-# IDE
+# I
 .vscode/
 .idea/
 

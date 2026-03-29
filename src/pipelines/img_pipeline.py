@@ -13,7 +13,7 @@ class ImgPipeline(BasePipeline):
         self.out_dir = out_dir
         self.pipe = FluxPipeline.from_pretrained(
             self.model_id,
-            dtype=torch.bfloat16,
+            torch_dtype=torch.bfloat16,
             use_safetensors=True
         )
         self.pipe.enable_attention_slicing()
