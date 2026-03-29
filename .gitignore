@@ -30,7 +30,9 @@ Thumbs.db
 *.mp3
 
 # Generated project outputs
+runs/
 src/runs/
+/src
 src/videos/
 src/voiceovers/
 src/scripts/
