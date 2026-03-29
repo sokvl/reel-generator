@@ -38,11 +38,7 @@ Rendering diffusion-based video is resource-intensive. While this serves as a so
 
 ## Final Output Demo
 
-<p align="center">
-  <video src="https://github.com/sokvl/reel-generator/raw/main/demo/neuroplasticity.mp4" width="320" controls>
-    Your browser does not support the video tag.
-  </video>
-</p>
+https://github.com/user-attachments/assets/fa02c5c5-7c2a-4060-aa55-7b17c67f7475
 
 **Prompt:** "How does neuroplasticity work and what it is?"  
 **Description:** A 60-second video explaining neural reorganization with synced narration and dynamic subtitles.
